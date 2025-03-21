@@ -177,6 +177,13 @@ export default function UnitConversion() {
 
   // Handle input change
   const handleInputChange = (unit, value) => {
+    // Allow empty input for deletion
+    if (value === '') {
+      setInputValues((prev) => ({ ...prev, [unit]: '' }));
+      setInputErrors((prev) => ({ ...prev, [unit]: '' }));
+      return;
+    }
+
     // Validate input
     const parsedValue = parseFloat(value);
     if (isNaN(parsedValue)) {
