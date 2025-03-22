@@ -15,6 +15,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
+import Footer from '../../components/Footer'; // Adjust the import path as needed
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
@@ -92,7 +93,7 @@ export default function TextTool() {
   // Widget: Remove Empty Lines
   const removeEmptyLines = () => {
     const lines = inputText.split('\n');
-    const nonEmptyLines = lines.filter(line => line.trim() !== '');
+    const nonEmptyLines = lines.filter((line) => line.trim() !== '');
     setOutputText(nonEmptyLines.join('\n'));
   };
 
@@ -135,9 +136,42 @@ export default function TextTool() {
 
   // Helper function to convert number to words
   const numberToWords = (num) => {
-    const units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-    const teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-    const tens = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    const units = [
+      '',
+      'one',
+      'two',
+      'three',
+      'four',
+      'five',
+      'six',
+      'seven',
+      'eight',
+      'nine',
+    ];
+    const teens = [
+      'ten',
+      'eleven',
+      'twelve',
+      'thirteen',
+      'fourteen',
+      'fifteen',
+      'sixteen',
+      'seventeen',
+      'eighteen',
+      'nineteen',
+    ];
+    const tens = [
+      '',
+      'ten',
+      'twenty',
+      'thirty',
+      'forty',
+      'fifty',
+      'sixty',
+      'seventy',
+      'eighty',
+      'ninety',
+    ];
     const scales = ['', 'thousand', 'million', 'billion', 'trillion', 'quadrillion'];
 
     if (num === 0) return 'zero';
@@ -189,7 +223,7 @@ export default function TextTool() {
       case 'capitalizeWords':
         convertedText = inputText
           .split(' ')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
           .join(' ');
         break;
       case 'capitalizeSentences':
@@ -277,129 +311,144 @@ export default function TextTool() {
   }
 
   return (
-    <StyledContainer>
-      {/* Sidebar/Widget Bar */}
-      <Sidebar>
-        <Typography
-          variant="subtitle1"
-          sx={{ fontWeight: 'bold', color: 'rgb(60, 60, 60)', p: 1 }}
-        >
-          Tools
-        </Typography>
-        <List>
-          {widgets.map((widget) => (
-            <ListItem key={widget.id} disablePadding>
-              <ListItemButton
-                selected={selectedWidget === widget.id}
-                onClick={() => setSelectedWidget(widget.id)} // Only set selection, no processing
-                sx={{
-                  borderRadius: '4px',
-                  '&.Mui-selected': {
-                    backgroundColor: 'primary.light',
-                    color: 'primary.contrastText',
-                  },
-                  '&:hover': {
-                    backgroundColor: 'grey.200',
-                  },
-                }}
-              >
-                <ListItemText primary={widget.label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Sidebar>
-
-      {/* Main Content */}
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <Box sx={{ textAlign: 'center', mb: 2 }}>
+    <>
+      <StyledContainer>
+        {/* Sidebar/Widget Bar */}
+        <Sidebar>
           <Typography
-            variant="h4"
-            sx={{ fontWeight: 'bold', color: 'rgb(60, 60, 60)' }}
+            variant="subtitle1"
+            sx={{ fontWeight: 'bold', color: 'rgb(60, 60, 60)', p: 1 }}
           >
-            Text Tool
+            Tools
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{ color: 'rgb(100, 100, 100)', mt: 1 }}
-          >
-            A versatile tool for text processing. Select a tool and click "Process" to apply.
-          </Typography>
+          <List>
+            {widgets.map((widget) => (
+              <ListItem key={widget.id} disablePadding>
+                <ListItemButton
+                  selected={selectedWidget === widget.id}
+                  onClick={() => setSelectedWidget(widget.id)} // Only set selection, no processing
+                  sx={{
+                    borderRadius: '4px',
+                    '&.Mui-selected': {
+                      backgroundColor: 'primary.light',
+                      color: 'primary.contrastText',
+                    },
+                    '&:hover': {
+                      backgroundColor: 'grey.200',
+                    },
+                  }}
+                >
+                  <ListItemText primary={widget.label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Sidebar>
+
+        {/* Main Content */}
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: 'bold', color: 'rgb(60, 60, 60)' }}
+            >
+              Text Tool
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ color: 'rgb(100, 100, 100)', mt: 1 }}
+            >
+              A versatile tool for text processing. Select a tool and click "Process" to apply.
+            </Typography>
+          </Box>
+
+          {/* Input Text Area */}
+          <StyledTextField
+            label="Input Text"
+            multiline
+            rows={6}
+            value={inputText}
+            onChange={handleInputChange}
+            placeholder="Enter your text here..."
+            variant="outlined"
+            fullWidth
+          />
+
+          {/* Additional Inputs for Replace String Widget */}
+          {selectedWidget === 'replaceString' && (
+            <>
+              <StyledTextField
+                label="Find String"
+                value={findString}
+                onChange={handleFindStringChange}
+                placeholder="Enter the string to find..."
+                variant="outlined"
+                fullWidth
+              />
+              <StyledTextField
+                label="Replace With"
+                value={replaceString}
+                onChange={handleReplaceStringChange}
+                placeholder="Enter the replacement string..."
+                variant="outlined"
+                fullWidth
+              />
+            </>
+          )}
+
+          {/* Additional Inputs for Convert Case Widget */}
+          {selectedWidget === 'convertCase' && (
+            <RadioGroup
+              value={caseConversionType}
+              onChange={handleCaseConversionTypeChange}
+              sx={{ mt: 2 }}
+            >
+              <FormControlLabel
+                value="uppercase"
+                control={<Radio />}
+                label="Convert to UPPERCASE"
+              />
+              <FormControlLabel
+                value="lowercase"
+                control={<Radio />}
+                label="Convert to lowercase"
+              />
+              <FormControlLabel
+                value="capitalizeWords"
+                control={<Radio />}
+                label="Capitalize Each Word"
+              />
+              <FormControlLabel
+                value="capitalizeSentences"
+                control={<Radio />}
+                label="Capitalize Each Sentence"
+              />
+            </RadioGroup>
+          )}
+
+          {/* Process Button */}
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <StyledButton variant="contained" color="primary" onClick={handleProcessClick}>
+              Process
+            </StyledButton>
+          </Box>
+
+          {/* Output Text Area */}
+          <StyledTextField
+            label="Output Text"
+            multiline
+            rows={6}
+            value={outputText}
+            variant="outlined"
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+            placeholder="Processed text will appear here..."
+          />
         </Box>
-
-        {/* Input Text Area */}
-        <StyledTextField
-          label="Input Text"
-          multiline
-          rows={6}
-          value={inputText}
-          onChange={handleInputChange}
-          placeholder="Enter your text here..."
-          variant="outlined"
-          fullWidth
-        />
-
-        {/* Additional Inputs for Replace String Widget */}
-        {selectedWidget === 'replaceString' && (
-          <>
-            <StyledTextField
-              label="Find String"
-              value={findString}
-              onChange={handleFindStringChange}
-              placeholder="Enter the string to find..."
-              variant="outlined"
-              fullWidth
-            />
-            <StyledTextField
-              label="Replace With"
-              value={replaceString}
-              onChange={handleReplaceStringChange}
-              placeholder="Enter the replacement string..."
-              variant="outlined"
-              fullWidth
-            />
-          </>
-        )}
-
-        {/* Additional Inputs for Convert Case Widget */}
-        {selectedWidget === 'convertCase' && (
-          <RadioGroup
-            value={caseConversionType}
-            onChange={handleCaseConversionTypeChange}
-            sx={{ mt: 2 }}
-          >
-            <FormControlLabel value="uppercase" control={<Radio />} label="Convert to UPPERCASE" />
-            <FormControlLabel value="lowercase" control={<Radio />} label="Convert to lowercase" />
-            <FormControlLabel value="capitalizeWords" control={<Radio />} label="Capitalize Each Word" />
-            <FormControlLabel value="capitalizeSentences" control={<Radio />} label="Capitalize Each Sentence" />
-          </RadioGroup>
-        )}
-
-        {/* Process Button */}
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <StyledButton
-            variant="contained"
-            color="primary"
-            onClick={handleProcessClick}
-          >
-            Process
-          </StyledButton>
-        </Box>
-
-        {/* Output Text Area */}
-        <StyledTextField
-          label="Output Text"
-          multiline
-          rows={6}
-          value={outputText}
-          variant="outlined"
-          fullWidth
-          InputProps={{
-            readOnly: true,
-          }}
-          placeholder="Processed text will appear here..."
-        />
-      </Box>
-    </StyledContainer>
+      </StyledContainer>
+      <Footer />
+    </>
   );
 }

@@ -11,6 +11,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
+import Footer from '../../components/Footer'; // Adjust the import path as needed
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiOutlinedInput-root': {
@@ -248,71 +249,74 @@ export default function UnitConversion() {
   }
 
   return (
-    <StyledContainer>
-      {/* Sidebar/Widget Bar */}
-      <Sidebar>
-        <Typography
-          variant="subtitle1"
-          sx={{ fontWeight: 'bold', color: 'rgb(60, 60, 60)', p: 1 }}
-        >
-          Tools
-        </Typography>
-        <List>
-          {widgets.map((widget) => (
-            <ListItem key={widget.id} disablePadding>
-              <ListItemButton
-                selected={selectedWidget === widget.id}
-                onClick={() => setSelectedWidget(widget.id)} // Only set selection, no processing
-                sx={{
-                  borderRadius: '4px',
-                  '&.Mui-selected': {
-                    backgroundColor: 'primary.light',
-                    color: 'primary.contrastText',
-                  },
-                  '&:hover': {
-                    backgroundColor: 'grey.200',
-                  },
-                }}
-              >
-                <ListItemText primary={widget.label} />
-              </ListItemButton>
-            </ListItem>
+    <>
+      <StyledContainer>
+        {/* Sidebar/Widget Bar */}
+        <Sidebar>
+          <Typography
+            variant="subtitle1"
+            sx={{ fontWeight: 'bold', color: 'rgb(60, 60, 60)', p: 1 }}
+          >
+            Tools
+          </Typography>
+          <List>
+            {widgets.map((widget) => (
+              <ListItem key={widget.id} disablePadding>
+                <ListItemButton
+                  selected={selectedWidget === widget.id}
+                  onClick={() => setSelectedWidget(widget.id)} // Only set selection, no processing
+                  sx={{
+                    borderRadius: '4px',
+                    '&.Mui-selected': {
+                      backgroundColor: 'primary.light',
+                      color: 'primary.contrastText',
+                    },
+                    '&:hover': {
+                      backgroundColor: 'grey.200',
+                    },
+                  }}
+                >
+                  <ListItemText primary={widget.label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Sidebar>
+
+        {/* Main Content */}
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: 'bold', color: 'rgb(60, 60, 60)' }}
+            >
+              Unit Conversion
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ color: 'rgb(100, 100, 100)', mt: 1 }}
+            >
+              A versatile tool for unit conversion. Select a tool and enter a value to convert.
+            </Typography>
+          </Box>
+
+          {/* Input Fields for Selected Widget */}
+          {unitOptions[selectedWidget].map((unit) => (
+            <StyledTextField
+              key={unit}
+              label={unit}
+              value={inputValues[unit] || ''}
+              onChange={(e) => handleInputChange(unit, e.target.value)}
+              placeholder={`Enter value in ${unit}`}
+              variant="outlined"
+              fullWidth
+              error={!!inputErrors[unit]}
+              helperText={inputErrors[unit]}
+            />
           ))}
-        </List>
-      </Sidebar>
-
-      {/* Main Content */}
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <Box sx={{ textAlign: 'center', mb: 2 }}>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 'bold', color: 'rgb(60, 60, 60)' }}
-          >
-            Unit Conversion
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ color: 'rgb(100, 100, 100)', mt: 1 }}
-          >
-            A versatile tool for unit conversion. Select a tool and enter a value to convert.
-          </Typography>
         </Box>
-
-        {/* Input Fields for Selected Widget */}
-        {unitOptions[selectedWidget].map((unit) => (
-          <StyledTextField
-            key={unit}
-            label={unit}
-            value={inputValues[unit] || ''}
-            onChange={(e) => handleInputChange(unit, e.target.value)}
-            placeholder={`Enter value in ${unit}`}
-            variant="outlined"
-            fullWidth
-            error={!!inputErrors[unit]}
-            helperText={inputErrors[unit]}
-          />
-        ))}
-      </Box>
-    </StyledContainer>
+      </StyledContainer>
+      <Footer />
+    </>
   );
 }
